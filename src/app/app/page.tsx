@@ -168,7 +168,7 @@ export default function AppWorkspace() {
         filename:     `${finalNote.title.replace(/[^a-zA-Z0-9]/g, '_')}.pdf`,
         image:        { type: 'jpeg' as const, quality: 0.98 },
         html2canvas:  { scale: 2, useCORS: true },
-        jsPDF:        { unit: 'mm', format: 'a4', orientation: 'portrait' }
+        jsPDF:        { unit: 'mm', format: 'a4', orientation: 'portrait' as const }
       };
       await html2pdf().from(element).set(opt).save();
     } catch (err) {
