@@ -1,0 +1,106 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider  = "postgresql"
+}
+
+model User {
+  id           String    @id @default(cuid())
+  name         String?
+  email        String    @unique
+  avatarUrl    String?
+  authProvider String    @default("email")
+  createdAt    DateTime  @default(now())
+  updatedAt    DateTime  @updatedAt
+
+  notes    Note[]
+  subjects Subject[]
+
+  @@map("users")
+}
+
+model Subject {
+  id        String   @id @default(cuid())
+  name      String
+  color     String   @default("#6366f1")
+  userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  notes     Note[]
+  createdAt DateTime @default(now())
+
+  @@unique([userId, name])
+  @@map("subjects")
+}
+
+model Note {
+  id            String     @id @default(cuid())
+  title         String
+  transcript    String?    @db.Text
+  formattedNote String?    @db.Text
+  summary       String?    @db.Text
+  keywords      String[]
+  userId        String
+  user          User       @relation(fields: [userId], references: [id], onDelete: Cascade)
+  subjectId     String?
+  subject       Subject?   @relation(fields: [subjectId], references: [id], onDelete: SetNull)
+  audioFile     AudioFile?
+  quizzes       Quiz[]
+  flashcards    Flashcard[]
+  status        NoteStatus @default(PROCESSING)
+  createdAt     DateTime   @default(now())
+  updatedAt     DateTime   @updatedAt
+
+  @@index([userId])
+  @@index([subjectId])
+  @@index([createdAt])
+  @@map("notes")
+}
+
+model AudioFile {
+  id        String   @id @default(cuid())
+  noteId    String   @unique
+  note      Note     @relation(fields: [noteId], references: [id], onDelete: Cascade)
+  url       String
+  fileName  String
+  fileSize  Int
+  duration  Float
+  mimeType  String
+  createdAt DateTime @default(now())
+
+  @@map("audio_files")
+}
+
+model Quiz {
+  id        String   @id @default(cuid())
+  noteId    String
+  note      Note     @relation(fields: [noteId], references: [id], onDelete: Cascade)
+  question  String
+  options   String[]
+  answer    Int
+  createdAt DateTime @default(now())
+
+  @@index([noteId])
+  @@map("quizzes")
+}
+
+model Flashcard {
+  id        String   @id @default(cuid())
+  noteId    String
+  note      Note     @relation(fields: [noteId], references: [id], onDelete: Cascade)
+  front     String
+  back      String
+  createdAt DateTime @default(now())
+
+  @@index([noteId])
+  @@map("flashcards")
+}
+
+enum NoteStatus {
+  PROCESSING
+  TRANSCRIBING
+  FORMATTING
+  COMPLETED
+  FAILED
+}
