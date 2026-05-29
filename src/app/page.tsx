@@ -21,16 +21,10 @@ export default function LandingPage() {
             <ThemeToggle />
           </div>
           <Link
-            href="/login"
-            className="px-4 py-2 rounded-xl text-sm font-medium text-muted-foreground hover:text-foreground transition-colors hidden sm:block"
-          >
-            Masuk
-          </Link>
-          <Link
-            href="/register"
+            href="/app"
             className="px-4 py-2 rounded-xl gradient-bg text-white text-sm font-semibold hover:opacity-90 transition-opacity shadow-lg shadow-primary/20"
           >
-            Daftar Gratis
+            Buka Workspace
           </Link>
         </div>
       </nav>

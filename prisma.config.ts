@@ -8,6 +8,7 @@ dotenv.config({ path: path.resolve(process.cwd(), ".env.local") });
 export default defineConfig({
   schema: "prisma/schema.prisma",
   datasource: {
-    url: env("DATABASE_URL"),
+    // The CLI (migrations, introspection) requires a direct connection
+    url: env("DIRECT_URL"),
   },
 });

@@ -18,8 +18,8 @@ export function Cta() {
             </p>
             <div className="pt-4 flex flex-col sm:flex-row items-center justify-center gap-4">
               <Button size="lg" className="w-full sm:w-auto h-12 px-8 rounded-full shadow-lg glow-primary" asChild>
-                <Link href="/register">
-                  Daftar Sekarang — Gratis
+                <Link href="/app">
+                  Buka Workspace Sekarang
                 </Link>
               </Button>
             </div>
