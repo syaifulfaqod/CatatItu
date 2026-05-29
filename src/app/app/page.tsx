@@ -157,12 +157,16 @@ export default function AppWorkspace() {
   // -------------------------
   
   const handleExportPDF = async () => {
-    if (!markdownRef.current || !finalNote) return;
-    setIsExporting(true);
     try {
+      if (typeof window === "undefined") return;
+      if (!markdownRef.current || !finalNote) return;
+      
+      setIsExporting(true);
+      
       // Dynamically import to prevent window SSR issues
       const html2pdf = (await import("html2pdf.js")).default;
       const element = markdownRef.current;
+      
       const opt = {
         margin:       15,
         filename:     `${finalNote.title.replace(/[^a-zA-Z0-9]/g, '_')}.pdf`,
@@ -170,6 +174,7 @@ export default function AppWorkspace() {
         html2canvas:  { scale: 2, useCORS: true },
         jsPDF:        { unit: 'mm', format: 'a4', orientation: 'portrait' as const }
       };
+      
       await html2pdf().from(element).set(opt).save();
     } catch (err) {
       console.error("PDF Export error:", err);
@@ -180,9 +185,11 @@ export default function AppWorkspace() {
   };
 
   const handleExportDOCX = async () => {
-    if (!markdownRef.current || !finalNote) return;
-    setIsExporting(true);
     try {
+      if (typeof window === "undefined") return;
+      if (!markdownRef.current || !finalNote) return;
+      
+      setIsExporting(true);
       // Get raw HTML from the rendered markdown ref
       const htmlContent = `
         <!DOCTYPE html>
